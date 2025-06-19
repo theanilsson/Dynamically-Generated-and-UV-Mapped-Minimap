@@ -1,7 +1,7 @@
 #include "common.hlsli"
 
 SamplerState SampleType;
-Texture2D culledWorldTexture : register(t11);
+Texture2D culledWorldTexture : register(t1);
 
 float4 main(ModelVertexToPixel input) : SV_TARGET
 {
@@ -15,12 +15,12 @@ float4 main(ModelVertexToPixel input) : SV_TARGET
     float4 p10 = culledWorldTexture.Sample(SampleType, uv + pixelOffset * float2(0.5f, -0.5f));
     float4 p11 = culledWorldTexture.Sample(SampleType, uv + pixelOffset * float2(0.5f, 0.5f));
  
-    float4 albedo = 0.25f * (p00 + p01 + p10 + p11);
+    float4 blendedAlbedo = 0.25f * (p00 + p01 + p10 + p11);
 		
-    if (albedo.a <= 0.0f)
+    if (blendedAlbedo.a <= 0.0f)
     {
         discard;
     }
 
-    return float4(albedo);
+    return blendedAlbedo;
 }
